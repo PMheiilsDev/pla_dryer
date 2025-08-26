@@ -20,6 +20,7 @@ void lcd_init();
 void lcd_clear();
 void lcd_set_cursor(uint8_t row, uint8_t col);
 void lcd_write_string(const char *str);
+void lcd_create_char(uint8_t location, uint8_t charmap[8]);
 
 void lcd_write(uint8_t data, bool is_data)
 {
@@ -87,6 +88,16 @@ void lcd_write_string(const char *str)
     }
 }
 
+void lcd_create_char(uint8_t location, uint8_t charmap[8])
+{
+    location &= 0x07; // Only 8 locations (0-7) are available
+    lcd_write(0x40 | (location << 3), false); // Set CGRAM address
+    for (int i = 0; i < 8; i++)
+    {
+        lcd_write(charmap[i], true); // Write character row data
+    }
+}
+
 /*------------- MAIN -------------*/
 int main()
 {
@@ -103,7 +114,25 @@ int main()
     // Initialize the LCD
     lcd_init();
 
-    
+    // Define a custom character (e.g., a smiley face)
+    uint8_t smiley[8] = {
+        0b00000,
+        0b00000,
+        0b11101,
+        0b00101,
+        0b11111,
+        0b10100,
+        0b10111,
+        0b00000
+    };
+
+    // Create the custom character in CGRAM location 0
+    lcd_create_char(0, smiley);
+
+    // Display the custom character
+    lcd_set_cursor(0, 0); // Set cursor to row 0, column 0
+    lcd_write(0, true);   // Write custom character (index 0)
+
     while (1)
     {
         for (uint8_t i = 0; i < LCD_COLS; i++)
@@ -113,7 +142,7 @@ int main()
             snprintf(buf, sizeof(buf), "%02d", i);
             lcd_write_string(buf);
             lcd_set_cursor(1, i); // Set cursor to row 1, column i
-            lcd_write_string("X"); // Write string to LCD
+            lcd_write(0, true); // Write custom character (index 0)
             sleep_ms(500);
             lcd_set_cursor(1, i);
             lcd_write_string(" ");
