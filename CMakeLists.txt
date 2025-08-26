@@ -32,11 +32,12 @@ target_link_libraries(lcd_test PUBLIC
 # Example source
 target_sources(lcd_test PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/main.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lcd/lcd.c
         )
 
 # Example include
 target_include_directories(lcd_test PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/lcd/include/
         )
 
 
