@@ -20,15 +20,16 @@ int main()
     lcd_init();
 
     // Define a custom character (e.g., a smiley face)
-    uint8_t smiley[8] = {
-        0b00000,
-        0b00000,
-        0b11101,
-        0b00101,
+    uint8_t smiley[8] = 
+    {
         0b11111,
-        0b10100,
-        0b10111,
-        0b00000
+        0b10101,
+        0b11011,
+        0b10101,
+        0b11011,
+        0b10101,
+        0b11011,
+        0b11111
     };
 
     // Create the custom character in CGRAM location 0
