@@ -1,0 +1,74 @@
+
+
+
+settings changeable on lcd 
+
+    goal temperature 
+    air change interval and duration
+    auto turn off time 
+
+    display humidity and temperature in standby 
+
+
+
+keep the temperature at the goal temperature 
+    always have heater fan on 
+    regulate heater so that temperature is in range ( +-1 deg )
+
+every air change interval activate two change fans to ventilate area
+
+turn off heater after auto turn off time also dont change air 
+
+
+
+
+run lcd handler on extra core monitor rotSW (maybe using interrupts)
+
+
+
+
+
+core1
+
+    MODES
+        IDLE
+            turn off heater 
+
+        HEATING 
+            get temperature and humidity via i2c maybe use multiple sensors in different positions
+
+            turn on / off heater 
+
+            if air change time 
+                activate change fans 
+
+
+core0
+    MODES
+        NORMAL 
+            update lcd with newest readings
+            
+            monitor rotSW button // enter menu mode 
+
+        MENU
+            // have a menu with multiple lines for every settings
+            // pressing button enters change value menu for the current thing or cancel/confirm 
+            // pressing button in change value menu changes back to settings menu 
+            // confirm settings starts starts heating mode  
+            "back            " // leave menu 
+            "Duration   xx:xx" // 00:00 means endless 
+            "Temperature xx°C" 
+            "Change  xx:xx:xx" 
+            "Heating    xx:xx" 
+            "Start Timer     " 
+
+        monitor rotSW rotation // move to next menu item 
+        monitor rotSW button // interact 
+
+
+
+
+
+POSSIBLE CHANGES
+// usb serial to make controlling temperature via usb possible 
+
